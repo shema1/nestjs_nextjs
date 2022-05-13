@@ -5,7 +5,7 @@ import { Box, Modal as MUIModal } from '@mui/material';
 interface ModalProps {
   setIsOpenModal: (isOpen: boolean) => void
   isOpen: boolean,
-  children: ReactNode
+  children: ReactNode,
 }
 
 

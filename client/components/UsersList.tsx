@@ -14,30 +14,35 @@ import _ from "lodash";
 import { ListItemButton } from '@mui/material';
 import { useActions } from '../hooks/useAction';
 interface UsrsListProps {
-  users?: IUser[]
+  users?: IUser[],
+  setSelectedUser?: (id: string) => void,
+  selecteduser?: string
 }
 
 
-const UsersList: React.FC<UsrsListProps> = () => {
+const UsersList: React.FC<UsrsListProps> = ({ users, setSelectedUser, selecteduser }) => {
 
-  const {  } = useActions()
+  const { } = useActions()
 
-  const users = [];
-
+  const onSelectUser = (id: string) => {
+    console.log("id", id)
+    setSelectedUser(id)
+  }
   const renderUsers = useMemo(() => {
     return _.map(users, (elem: IUser) => (
-      <ListItem key={elem._id} alignItems="flex-start">
-        <ListItemButton>
-          <ListItemAvatar>
-            <Avatar alt={elem.name} src="/static/images/avatar/1.jpg" />
-          </ListItemAvatar>
-          <ListItemText
-            primary={elem.name}
-          />
-        </ListItemButton>
-      </ListItem>
+      // <ListItem >
+      <ListItemButton key={elem._id} alignItems="flex-start" style={{ backgroundColor: selecteduser === elem._id ? "#0000ff26" : "#fff" }} onClick={() => onSelectUser(elem._id)}>
+        <ListItemAvatar>
+          <Avatar alt={elem.name} src="/static/images/avatar/1.jpg" />
+        </ListItemAvatar>
+        <ListItemText
+          primary={elem.name}
+        />
+      </ListItemButton>
+      // </ListItem>
     ))
-  }, [users])
+  }, [users, selecteduser])
+
   return (
     <div>
       <h2>User List</h2>

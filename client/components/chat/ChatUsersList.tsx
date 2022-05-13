@@ -5,6 +5,7 @@ import _ from "lodash"
 import { Button } from '@mui/material';
 import Modal from '../Modal';
 import UsersList from '../UsersList';
+import CreateNewChat from './CreateNewChat';
 interface ChatUsersListProps {
   chats: ICaht[]
   selectChat: (id: string) => void
@@ -13,7 +14,7 @@ interface ChatUsersListProps {
 const ChatUsersList: NextPage<ChatUsersListProps> = ({ chats, selectChat }) => {
 
   const [isOpenModal, setIsOpenModal] = React.useState(false);
-  
+
   const closeChat = () => {
     selectChat("")
   }
@@ -44,9 +45,7 @@ const ChatUsersList: NextPage<ChatUsersListProps> = ({ chats, selectChat }) => {
 
   return (
     <div className="people-list" id="people-list">
-      <Modal isOpen={isOpenModal} setIsOpenModal={setIsOpenModal} >
-        <UsersList users={[]} />
-      </Modal>
+      {isOpenModal && <CreateNewChat setIsOpenModal={setIsOpenModal} isOpen={isOpenModal} />}
       <div className="chat-add">
         <Button variant="contained" onClick={handleOpenModal}>+ Add new chat</Button>
       </div>

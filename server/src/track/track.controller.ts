@@ -55,7 +55,7 @@ export class TrackController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Tracks list' })
   @ApiResponse({ status: 200, type: [Track] })
   getAll(
@@ -66,7 +66,7 @@ export class TrackController {
   }
 
   @Get('/search')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   search(
     @Query('query') query: string,
   ) {
@@ -74,7 +74,7 @@ export class TrackController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get track' })
   @ApiParam({ name: 'id', required: true, description: 'Track id', schema: { type: 'string' } })
   @ApiResponse({ status: 200, type: Track })
@@ -83,7 +83,7 @@ export class TrackController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete track' })
   @ApiParam({ name: 'id', required: true, description: 'Track id', schema: { type: 'string' } })
   @ApiResponse({ status: 200, type: "6262aba2761d957e6e06b47b" })
@@ -92,7 +92,7 @@ export class TrackController {
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update track' })
   @ApiResponse({ status: 200, type: Track })
   update(@Param('id') id, @UploadedFiles() files: CreateTrackFileDto, @Body() dto: CreateTrackDto) {
@@ -101,7 +101,7 @@ export class TrackController {
   }
 
   @Post('/comment')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Add comment' })
   @ApiResponse({ status: 200, type: Comment })
   addComent(@Body() dto: CreateCommentDto) {
@@ -109,7 +109,7 @@ export class TrackController {
   }
 
   @Post('/listen')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Increase track listen count' })
   @ApiParam({ name: 'id', required: true, description: 'Track id', schema: { type: 'string' } })
   listen(@Body() id: ObjectId) {

@@ -34,7 +34,7 @@ export class UsersService {
   }
 
   async getAllUsers(): Promise<User[]> {
-    const users = await this.userModel.find()
+    const users = await this.userModel.find().populate("chats").exec()
     return users
   }
 

@@ -1,10 +1,12 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { ApiProperty } from "@nestjs/swagger";
 import { Chat } from "src/chat/schemas/chat.schema";
-import * as mongoose from 'mongoose'
 
 export type UserDocument = User & Document
+
+
+console.log("test", Chat)
 @Schema()
 export class User {
 
@@ -22,10 +24,10 @@ export class User {
   @Prop()
   password: string;
 
-  @Prop({
-    type: { type: mongoose.Schema.Types.ObjectId, ref: "chat" }
-  })
+  @Prop({ type: [{ type: Types.ObjectId, ref: "chat" }] })
   chats: Chat[];
+  // @Prop({ type: [{ type: Types.ObjectId, required: false, ref: Chat.name }] })
+  // chats: Chat[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)

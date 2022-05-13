@@ -6,6 +6,7 @@ import { User, UserDocument } from "src/users/schemas/user.schema";
 import { Request } from "express";
 import { AuthService } from "src/auth/auth.service";
 import { UsersService } from "src/users/users.service";
+import { CreateChatDto } from "./dto/create-chat.dto";
 
 @Injectable()
 export class ChatService {
@@ -22,7 +23,9 @@ export class ChatService {
     console.log("jwt", jwt)
     const decodeUser = await this.authService.decode(jwt)
     const chatsIds = await this.userService.getUserChats(decodeUser._id)
-    const chats = await this.chatModel.find({ '_id': { $in: chatsIds } }).populate("users")
+    // const chats = await this.chatModel.find({ '_id': { $in: chatsIds } }).populate({ path: 'users', Model: User })
+    const chats = await this.chatModel.find().populate("users")
+
     return chats
   }
 
@@ -42,9 +45,24 @@ export class ChatService {
     return updatedChat
   }
 
-  async setChatToUsers(senderId: string, recipientId: string, newChat: Chat): Promise<void> {
-    const sender = await this.userModel.findByIdAndUpdate(senderId, { $push: { chats: newChat._id } }, { new: true, useFindAndModify: false })
-    const recipient = await this.userModel.findByIdAndUpdate(recipientId, { $push: { chats: newChat._id } }, { new: true, useFindAndModify: false })
+  async setChatToUsers(senderId: string, recipientId: string, newChatId: string): Promise<void> {
+    console.log("cccchat", newChatId)
+    const sender = await this.userModel.findByIdAndUpdate(senderId, { $push: { chats: newChatId } }, { new: true, useFindAndModify: false })
+    const recipient = await this.userModel.findByIdAndUpdate(recipientId, { $push: { chats: newChatId } }, { new: true, useFindAndModify: false })
+  }
+
+
+  async setUsersToChat(chatId: string, senderId: string, recipientId: string): Promise<void> {
+    const chat = await this.chatModel.findByIdAndUpdate(chatId, { $push: { users: { $each: [senderId, recipientId] } } }, { new: true, useFindAndModify: false })
+  }
+
+  async createChat(chat: CreateChatDto): Promise<Chat> {
+    console.log("params", chat)
+    const newChat = await this.chatModel.create({ messages: [], sender: chat.sender, recipient: chat.recipient })
+    await this.setChatToUsers(chat.sender, chat.recipient, newChat.id);
+    await this.setUsersToChat(newChat._id, chat.sender, chat.recipient)
+    console.log("newChat", newChat)
+    return newChat.save()
   }
 
   async saveChat(chat: any): Promise<void> {
@@ -52,7 +70,7 @@ export class ChatService {
     // const recipient = await this.userModel.findById(chat.recipient)
     if (!chat._id) {
       const newChat = await this.chatModel.create(chat)
-      this.setChatToUsers(chat.sender, chat.recipient, newChat)
+      this.setChatToUsers(chat.sender, chat.recipient, newChat._id)
     } else {
       // this.addMessage(chat._id, chat.)
     }

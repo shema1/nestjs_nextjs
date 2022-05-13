@@ -23,8 +23,14 @@ export interface ChatsState {
   error: string
 }
 
+export interface CreateChatDto {
+  sender: string
+  recipient: string
+}
+
 export enum ChatActionTypes {
   GET_CHATS = 'GET_CHATS',
+  CREATE_CHAT = 'CREATE_CHAT',
   GET_CHATS_LOADING = 'GET_CHATS_LOADING',
   GET_CHATS_ERROR = 'GET_CHATS_ERROR',
   SET_CHATS_FROM_SOCKETS = 'SET_CHATS_FROM_SOCKETS'
@@ -33,6 +39,11 @@ export enum ChatActionTypes {
 interface getChatsActions {
   type: ChatActionTypes.GET_CHATS,
   payload: ICaht[]
+}
+
+interface createChatActions {
+  type: ChatActionTypes.CREATE_CHAT,
+  payload: ICaht
 }
 
 interface getChatsLoadingActions {
@@ -51,4 +62,4 @@ interface setChatsFromSocketErrorActions {
 }
 
 
-export type ChatActions = getChatsActions | getChatsLoadingActions | getChatsErrorActions | setChatsFromSocketErrorActions
+export type ChatActions = getChatsActions | getChatsLoadingActions | getChatsErrorActions | setChatsFromSocketErrorActions | createChatActions

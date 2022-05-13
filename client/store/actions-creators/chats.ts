@@ -1,5 +1,5 @@
 import { Dispatch } from "react"
-import { ChatActions, ChatActionTypes, ICaht } from "../../types/chat"
+import { ChatActions, ChatActionTypes, CreateChatDto, ICaht } from "../../types/chat"
 import axios from "axios";
 import handleError from "../../services/handleError";
 
@@ -20,6 +20,17 @@ export const setChatsFromSocket = (data: ICaht) => {
   return async (dispatch: Dispatch<ChatActions>) => {
     try {
       dispatch({ type: ChatActionTypes.SET_CHATS_FROM_SOCKETS, payload: data })
+    } catch (error) {
+      console.log("error", error)
+    }
+  }
+}
+
+export const createChat = (params: CreateChatDto) => {
+  return async (dispatch: Dispatch<ChatActions>) => {
+    try {
+      const response = await axios.post('http://localhost:5000/chat', params)
+      dispatch({ type: ChatActionTypes.CREATE_CHAT, payload: response.data })
     } catch (error) {
       console.log("error", error)
     }
