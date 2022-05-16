@@ -1,11 +1,11 @@
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { User } from 'src/users/schemas/user.schema';
+import { User, UserSchema } from 'src/users/schemas/user.schema';
 
 export type ChatDocument = Chat & Document
 
-console.log("ssss", User.name)
+console.log("ssss", User)
 export interface Message {
   chatId: string
   message: string
@@ -25,7 +25,7 @@ export class Chat {
   recipient: string
   // @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }] })
   // users: User[];
-  @Prop({ type: [{ type: Types.ObjectId, required: false, ref: User.name }] })
+  @Prop({ type: [{ type: Types.ObjectId, required: false, ref: () => "User" }] })
   users: User[];
 }
 

@@ -22,7 +22,7 @@ export class ChatService {
     const decodeUser = await this.authService.decode(jwt)
     const chatsIds = await this.userService.getUserChats(decodeUser._id)
     // const chats = await this.chatModel.find({ '_id': { $in: chatsIds } }).populate({ path: 'users', Model: User })
-    const chats = await this.chatModel.find().populate("users")
+    const chats = await this.chatModel.find().populate("users", "-chats")
 
     return chats
   }
@@ -34,7 +34,7 @@ export class ChatService {
   }
 
   async getChat(id: ObjectId): Promise<Chat> {
-    return await this.chatModel.findById(id).populate("users")
+    return await this.chatModel.findById(id).populate("users", "-chats")
   }
 
   async addMessage(message: Message): Promise<Chat> {
@@ -44,21 +44,18 @@ export class ChatService {
   }
 
   async setUsersToChat(chatId: string, senderId: string, recipientId: string): Promise<void> {
-    const chat = await this.chatModel.findByIdAndUpdate(chatId, { $push: { users: { $each: [senderId, recipientId] } } }, { new: true, useFindAndModify: false })
+    await this.chatModel.findByIdAndUpdate(chatId, { $push: { users: { $each: [senderId, recipientId] } } }, { new: true, useFindAndModify: false })
   }
 
   async createChat(chat: CreateChatDto): Promise<Chat> {
-    console.log("params", chat)
-    const newChat = await this.chatModel.create({ messages: [], sender: chat.sender, recipient: chat.recipient, users: [chat.sender, chat.recipient] })
+    const newChat = await this.chatModel.create({ messages: [], sender: chat.sender, recipient: chat.recipient })
 
     await this.userService.setNewChatToUser(chat.sender, newChat._id)
     await this.userService.setNewChatToUser(chat.recipient, newChat._id)
 
     await this.setUsersToChat(newChat._id, chat.sender, chat.recipient)
 
-    console.log("newChat", newChat)
-
-    return newChat.save()
+    return await  this.chatModel.findById(newChat._id)
   }
 
   async saveChat(chat: any): Promise<void> {

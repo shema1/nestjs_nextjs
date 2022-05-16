@@ -1,13 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from 'mongoose';
 import { ApiProperty } from "@nestjs/swagger";
-import { Chat } from "src/chat/schemas/chat.schema";
+import { Chat, ChatSchema } from "src/chat/schemas/chat.schema";
 import { Exclude } from "class-transformer";
 
 export type UserDocument = User & Document
 
-
-console.log("test", Chat)
 @Schema()
 export class User {
 
@@ -33,10 +31,10 @@ export class User {
   @Prop()
   password: string;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: "chat" }] })
-  chats: Chat[];
-  // @Prop({ type: [{ type: Types.ObjectId, required: false, ref: Chat.name }] })
+  // @Prop({ type: [{ type: Types.ObjectId, ref: "chat" }] })
   // chats: Chat[];
+  @Prop({ type: [{ type: Types.ObjectId, required: false, ref: () => "Chat" }] })
+  chats: Chat[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)

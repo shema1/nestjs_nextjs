@@ -5,7 +5,7 @@ import { Chat } from "src/chat/schemas/chat.schema";
 import { CreateUserkDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User, UserDocument } from "./schemas/user.schema";
-import {omit} from "lodash"
+import { omit } from "lodash"
 var _ = require('lodash');
 @Injectable()
 export class UsersService {
@@ -35,7 +35,7 @@ export class UsersService {
   }
 
   async getAllUsers(): Promise<User[]> {
-    const users = await this.userModel.find().populate("chats").exec()
+    const users = await this.userModel.find().populate("chats", "-users")
     return users
   }
 
@@ -52,6 +52,6 @@ export class UsersService {
   }
 
   async setNewChatToUser(userId: ObjectId, chatId: ObjectId): Promise<void> {
-    await this.userModel.findByIdAndUpdate(userId, { $push: chatId }, { new: true, useFindAndModify: false })
+    const user = await this.userModel.findByIdAndUpdate(userId, { $push: { chats: chatId } })
   }
 }
