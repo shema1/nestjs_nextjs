@@ -16,7 +16,8 @@ export interface ILogin {
 export interface ISignUp {
   email: string;
   name: string;
-  password: string
+  lastName: string;
+  password: string;
 }
 
 export enum AuthActionTypes {

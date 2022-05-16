@@ -1,17 +1,14 @@
-import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import PersonIcon from '@mui/icons-material/Person';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -20,6 +17,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import { useRouter } from "next/router";
 import { Button } from '@mui/material';
 import { useActions } from '../hooks/useAction';
+import UserInfoModal from './profile/USerInfoModal';
 
 
 const menuItems = [
@@ -29,7 +27,9 @@ const menuItems = [
 ]
 
 export default function NavBar() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [isOpenProfileModal, setIsOpenProfileModal] = useState(false);
+
   const router = useRouter()
   const { logout } = useActions()
 
@@ -48,6 +48,10 @@ export default function NavBar() {
     })
   }
 
+  const openProfileInfo = () => {
+    setIsOpenProfileModal(true)
+  }
+
   return (
     <div>
       <AppBar position="fixed">
@@ -63,9 +67,14 @@ export default function NavBar() {
           <Typography variant="h6" noWrap component="div">
             Persistent drawer
           </Typography>
-          <Button style={{ marginLeft: "auto", color: " #fff" }} onClick={onLogout}>
-            Log out
-          </Button>
+          <div style={{ marginLeft: "auto", display: 'flex', alignContent: "center" }}>
+            <IconButton onClick={openProfileInfo}>
+              <PersonIcon />
+            </IconButton>
+            <Button style={{ color: "#fff" }} onClick={onLogout}>
+              Log out
+            </Button>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -89,6 +98,7 @@ export default function NavBar() {
           ))}
         </List>
       </Drawer>
+      <UserInfoModal isOpen={isOpenProfileModal} setIsOpenModal={setIsOpenProfileModal} />
     </div>
   );
 }

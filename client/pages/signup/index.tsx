@@ -10,6 +10,7 @@ const SignupPage: NextPage = () => {
   const router = useRouter();
   const email = useInput("")
   const name = useInput("")
+  const lastName = useInput("")
   const password = useInput("")
 
   const { registration } = useActions()
@@ -22,7 +23,12 @@ const SignupPage: NextPage = () => {
   }
 
   const onSignIn = () => {
-    registration({ email: email.value, password: password.value, name: name.value }, callback)
+    registration({ 
+      email: email.value, 
+      password: password.value, 
+      name: name.value, 
+      lastName: lastName.value 
+    }, callback)
   }
 
   return (
@@ -41,11 +47,16 @@ const SignupPage: NextPage = () => {
             label="Name"
           />
           <TextField
+            {...lastName}
+            style={{ marginTop: 10 }}
+            label="LastName"
+          />
+          <TextField
             {...password}
             style={{ marginTop: 10 }}
             label="Password"
           />
-          <Button variant="contained" style={{marginTop: 20}} onClick={onSignIn}>
+          <Button variant="contained" style={{ marginTop: 20 }} onClick={onSignIn}>
             Sign up
           </Button>
           <Button onClick={callback}>
