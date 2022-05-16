@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Chat, ChatDocument, Message } from "./schemas/chat.schema";
 import { Model, ObjectId } from "mongoose";
-import { User, UserDocument } from "src/users/schemas/user.schema";
 import { Request } from "express";
 import { AuthService } from "src/auth/auth.service";
 import { UsersService } from "src/users/users.service";
@@ -12,7 +11,6 @@ import { CreateChatDto } from "./dto/create-chat.dto";
 export class ChatService {
   constructor(
     @InjectModel(Chat.name) private chatModel: Model<ChatDocument>,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
     private authService: AuthService,
     private userService: UsersService
   ) { }
@@ -45,23 +43,21 @@ export class ChatService {
     return updatedChat
   }
 
-  async setChatToUsers(senderId: string, recipientId: string, newChatId: string): Promise<void> {
-    console.log("cccchat", newChatId)
-    const sender = await this.userModel.findByIdAndUpdate(senderId, { $push: { chats: newChatId } }, { new: true, useFindAndModify: false })
-    const recipient = await this.userModel.findByIdAndUpdate(recipientId, { $push: { chats: newChatId } }, { new: true, useFindAndModify: false })
-  }
-
-
   async setUsersToChat(chatId: string, senderId: string, recipientId: string): Promise<void> {
     const chat = await this.chatModel.findByIdAndUpdate(chatId, { $push: { users: { $each: [senderId, recipientId] } } }, { new: true, useFindAndModify: false })
   }
 
   async createChat(chat: CreateChatDto): Promise<Chat> {
     console.log("params", chat)
-    const newChat = await this.chatModel.create({ messages: [], sender: chat.sender, recipient: chat.recipient })
-    await this.setChatToUsers(chat.sender, chat.recipient, newChat.id);
+    const newChat = await this.chatModel.create({ messages: [], sender: chat.sender, recipient: chat.recipient, users: [chat.sender, chat.recipient] })
+
+    await this.userService.setNewChatToUser(chat.sender, newChat._id)
+    await this.userService.setNewChatToUser(chat.recipient, newChat._id)
+
     await this.setUsersToChat(newChat._id, chat.sender, chat.recipient)
+
     console.log("newChat", newChat)
+
     return newChat.save()
   }
 
@@ -70,7 +66,7 @@ export class ChatService {
     // const recipient = await this.userModel.findById(chat.recipient)
     if (!chat._id) {
       const newChat = await this.chatModel.create(chat)
-      this.setChatToUsers(chat.sender, chat.recipient, newChat._id)
+      // this.setChatToUsers(chat.sender, chat.recipient, newChat._id)
     } else {
       // this.addMessage(chat._id, chat.)
     }

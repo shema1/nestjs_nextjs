@@ -49,4 +49,8 @@ export class UsersService {
     const user = await this.userModel.findByIdAndDelete(id)
     return user._id
   }
+
+  async setNewChatToUser(userId: ObjectId, chatId: ObjectId): Promise<void> {
+    await this.userModel.findByIdAndUpdate(userId, { $push: chatId }, { new: true, useFindAndModify: false })
+  }
 }
