@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from 'mongoose';
 import { ApiProperty } from "@nestjs/swagger";
 import { Chat } from "src/chat/schemas/chat.schema";
+import { Exclude } from "class-transformer";
 
 export type UserDocument = User & Document
 
@@ -15,6 +16,14 @@ export class User {
   @ApiProperty({ example: 'name' })
   @Prop()
   name: string;
+
+  @ApiProperty({ example: 'lastNaeme' })
+  @Prop()
+  lastName: string;
+
+  @ApiProperty({ example: 'src/image.png' })
+  @Prop({ default: null })
+  avatar: string;
 
   @ApiProperty({ example: 'email@mail.com' })
   @Prop()

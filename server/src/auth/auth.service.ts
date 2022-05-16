@@ -35,7 +35,7 @@ export class AuthService {
     if (candidate) {
       throw new HttpException('Email alredy exist', HttpStatus.BAD_REQUEST);
     }
-    const user = this.usersService.createUser(dto)
+    const user = await this.usersService.createUser(dto)
     return user
   }
 

@@ -5,6 +5,8 @@ import { Chat } from "src/chat/schemas/chat.schema";
 import { CreateUserkDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User, UserDocument } from "./schemas/user.schema";
+import {omit} from "lodash"
+var _ = require('lodash');
 @Injectable()
 export class UsersService {
 
@@ -13,9 +15,8 @@ export class UsersService {
   ) { }
 
   async createUser(dto: CreateUserkDto): Promise<User> {
-    console.log("dto", dto)
-    const user = await this.userModel.create({ ...dto });
-    return user
+    const newUser = await this.userModel.create({ ...dto });
+    return await this.userModel.findById(newUser._id).select('-password')
   }
 
   async getUser(id: ObjectId | string): Promise<User> {

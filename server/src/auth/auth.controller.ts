@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards, UsePipes } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, Post, Req, UseGuards, UseInterceptors, UsePipes } from "@nestjs/common";
 import { User } from "src/users/schemas/user.schema";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
