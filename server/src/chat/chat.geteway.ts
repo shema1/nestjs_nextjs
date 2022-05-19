@@ -42,6 +42,8 @@ export class ChatGeteway implements OnGatewayConnection {
     // console.log('message', message);
     const result = await this.chatService.addMessage(message)
 
+    
+
     // console.log("result", result)
     // socket.emit('newChat', result)
 
