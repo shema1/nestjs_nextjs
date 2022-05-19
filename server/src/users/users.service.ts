@@ -44,8 +44,6 @@ export class UsersService {
 
   async updateUser(avatar: any, dto: UpdateUserDto): Promise<User> {
     const user = await this.userModel.findByIdAndUpdate(dto._id, dto);
-
-    console.log("tiut avavtar", avatar)
     if (avatar) {
       const picturePath = this.fileService.createFile(FileType.IMAGE, avatar[0]);
       await user.update({ $set: { avatar: picturePath } })

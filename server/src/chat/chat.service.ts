@@ -29,7 +29,6 @@ export class ChatService {
 
   async getChatsByUser(): Promise<Chat[]> {
     const chats = await this.chatModel.find();
-    // console.log("chats test", chats)
     return chats
   }
 

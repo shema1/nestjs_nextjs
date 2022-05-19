@@ -25,7 +25,6 @@ const style = {
 const Modal: React.FC<ModalProps> = ({ setIsOpenModal, isOpen, children }) => {
 
   const handleClose = () => setIsOpenModal(false);
-  console.log("sadkasdas", children)
   return (
     <div>
       <MUIModal

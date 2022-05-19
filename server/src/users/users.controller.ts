@@ -38,20 +38,17 @@ export class UsersController {
   @ApiResponse({ status: 200, type: User })
   @ApiParam({ name: 'id', required: true, description: 'User id', schema: { type: 'string' } })
   getUser(@Param("id") id: ObjectId) {
-    console.log("rrrrr", id)
     return this.usersService.getUser(id)
   }
 
   @Put('/update')
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update user' })
   @ApiResponse({ status: 200, type: User })
   // @UsePipes(new ValidationPipe({ whitelist: true }))
   @UseInterceptors(FileFieldsInterceptor([{ name: 'avatar', maxCount: 1 }]))
   updateUser(@UploadedFiles() file: any, @Body() dto: UpdateUserDto) {
     const { avatar } = file
-    console.log("dto", dto)
-    console.log("files", avatar)
     return this.usersService.updateUser(avatar, dto)
   }
 

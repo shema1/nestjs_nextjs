@@ -4,7 +4,6 @@ import React from 'react';
 import _ from "lodash"
 
 const handleError = (error: any) => {
-  console.log("errror", error)
   const errorData = error?.response?.data
 
   if (!errorData) {

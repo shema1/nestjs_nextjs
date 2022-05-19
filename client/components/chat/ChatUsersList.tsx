@@ -28,7 +28,6 @@ const ChatUsersList: NextPage<ChatUsersListProps> = ({ chats, selectChat }) => {
   const handleOpenModal = () => setIsOpenModal(true);
 
   const renderChats = () => {
-    console.log("chats", chats)
     return _.map(chats, elem => (
       <li className="clearfix" onClick={(e) => openChat(e, elem._id)}>
         <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />

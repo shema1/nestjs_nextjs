@@ -19,7 +19,6 @@ const ChatMain: NextPage<ChatMainProps> = ({ onSend, selectedChat, chats }) => {
   const messagesEndRef = useRef(null)
 
   const scrollToBottom = () => {
-    console.log("test", messagesEndRef.current.scrollIntoView)
     messagesEndRef.current?.scrollIntoView({ behavior: "auto" })
   }
 
@@ -46,7 +45,6 @@ const ChatMain: NextPage<ChatMainProps> = ({ onSend, selectedChat, chats }) => {
   }
 
   const renderMessages = () => {
-    console.log("messages", chat)
     return _.map(chat?.messages, (elem, index) => (
       <li className="clearfix" key={`${elem.message}-${index}`}>
         <div className={`message-data ${currentUser._id === elem.sender ? "" : "align-right"}`}>

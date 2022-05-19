@@ -55,7 +55,7 @@ export class TrackController {
   }
 
   @Get()
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Tracks list' })
   @ApiResponse({ status: 200, type: [Track] })
   getAll(

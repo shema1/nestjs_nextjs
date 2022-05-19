@@ -10,7 +10,6 @@ const Index = () => {
 
   const socket = io(ENDPOINT);
   useEffect(() => {
-    console.log("work")
     socket.on("newChat", data => {
       console.log("newChat", data)
       setResponse(data);

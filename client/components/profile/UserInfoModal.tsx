@@ -21,7 +21,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({ setIsOpenModal, isOpen, u
 
   const [userInfo, setUserInfo] = useState(null);
 
-  // const [picture, setPicture] = useState(null)
+  const [picture, setPicture] = useState(null)
 
   const id = userId ? userId : currentUser?._id
 
@@ -32,12 +32,14 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({ setIsOpenModal, isOpen, u
   }
 
   const onSaveData = () => {
-    // setIsOpenModal(false)
     const formData: FormData = new FormData()
     _.forEach(userInfo, (value, key) => {
       formData.append(key, value)
     })
-    updateUser(formData)
+    if (picture) {
+      formData.append("avatar", picture)
+    }
+    updateUser(formData, onCancel)
   }
 
   useEffect(() => {
@@ -54,19 +56,13 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({ setIsOpenModal, isOpen, u
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value })
   }
 
-  const setPicture = (value) => {
-    setUserInfo({ ...userInfo, avatar: value })
-  }
-
   return (
     <Modal isOpen={isOpen} setIsOpenModal={setIsOpenModal}>
       <div>
         <div style={{ height: 100 }}>
           <FileUpload setFile={setPicture} accept="image/*">
             <IconButton>
-              {/* <Avatar alt={userInfo?.name + ' ' + userInfo?.lastName} src={(picture && URL.createObjectURL(picture)) || (userInfo?.avatar && `http://localhost:5000/${userInfo?.avatar}`)} sx={{ width: 80, height: 80, }} /> */}
-              <Avatar alt={userInfo?.name + ' ' + userInfo?.lastName} src={userInfo?.avatar ? `http://localhost:5000/${userInfo?.avatar}` : ""} sx={{ width: 80, height: 80, }} />
-
+              <Avatar alt={userInfo?.name + ' ' + userInfo?.lastName} src={picture ? URL.createObjectURL(picture) : `http://localhost:5000/${userInfo?.avatar}`} sx={{ width: 80, height: 80, }} />
             </IconButton>
           </FileUpload>
         </div>
