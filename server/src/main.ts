@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 const start = async () => {
   try {
@@ -14,6 +15,9 @@ const start = async () => {
       .build()
 
     const document = SwaggerModule.createDocument(app, config);
+    app.useGlobalPipes(new ValidationPipe({
+      whitelist: true,
+    }));
 
     SwaggerModule.setup('/api/docs', app, document)
 

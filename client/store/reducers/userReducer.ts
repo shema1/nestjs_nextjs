@@ -28,9 +28,10 @@ export const userReducer = (state = initState, action: UserAction): UserState =>
       }
 
     case UserActionTypes.GET_USER:
+      const isContainUser = _.findIndex(state.users, ['_id', action.payload._id])
       return {
         ...state,
-        users: _.map(state.users, elem => elem._.id === action.payload._id ? action.payload : elem),
+        users: !isContainUser ? [...state.users, action.payload] : [..._.filter(state.users, elem => elem._id !== action.payload._id), action.payload],
         usersLoading: { ...state.usersLoading, [UserActionTypes.GET_USER_LOADING]: false }
       }
     case UserActionTypes.GET_USER_LOADING:
@@ -46,9 +47,10 @@ export const userReducer = (state = initState, action: UserAction): UserState =>
       }
 
     case UserActionTypes.UPDATE_USER:
+      const isContainUpdatedUser = _.find(state.users, ['_id', action.payload._id])
       return {
         ...state,
-        users: _.map(state.users, elem => elem._.id === action.payload._id ? action.payload : elem),
+        users: !isContainUpdatedUser ? [...state.users, action.payload] : [..._.filter(state.users, elem => elem._id !== action.payload._id), action.payload],
         usersLoading: { ...state.usersLoading, [UserActionTypes.UPDATE_USER_LOADING]: false }
       }
     case UserActionTypes.UPDATE_USER_LOADING:

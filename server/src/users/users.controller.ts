@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFiles, UseGuards, UseInterceptors, Request } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFiles, UseGuards, UseInterceptors, Request, UsePipes, ValidationPipe } from "@nestjs/common";
+import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ObjectId } from 'mongoose'
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
@@ -36,16 +37,22 @@ export class UsersController {
   @ApiOperation({ summary: 'Get user' })
   @ApiResponse({ status: 200, type: User })
   @ApiParam({ name: 'id', required: true, description: 'User id', schema: { type: 'string' } })
-  getUser(id: ObjectId) {
+  getUser(@Param("id") id: ObjectId) {
+    console.log("rrrrr", id)
     return this.usersService.getUser(id)
   }
 
-  @Put(':id')
-  @UseGuards(JwtAuthGuard)
+  @Put('/update')
+  // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update user' })
   @ApiResponse({ status: 200, type: User })
-  updateUser(@Param('id') id, @Body() dto: UpdateUserDto) {
-    return this.usersService.updateUser(id, dto)
+  // @UsePipes(new ValidationPipe({ whitelist: true }))
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'avatar', maxCount: 1 }]))
+  updateUser(@UploadedFiles() file: any, @Body() dto: UpdateUserDto) {
+    const { avatar } = file
+    console.log("dto", dto)
+    console.log("files", avatar)
+    return this.usersService.updateUser(avatar, dto)
   }
 
   @Delete(':id')

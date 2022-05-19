@@ -1,7 +1,7 @@
 import axios from "axios"
 import { Dispatch } from "react"
 import handleError from "../../services/handleError"
-import { UserAction, UserActionTypes } from "../../types/user"
+import { IUpdateUser, UserAction, UserActionTypes } from "../../types/user"
 
 
 export const getUsers = () => {
@@ -22,9 +22,10 @@ export const getUser = (id: string) => {
     try {
       dispatch({ type: UserActionTypes.GET_USER_LOADING, payload: true })
       const response = await axios.get(`http://localhost:5000/users/${id}`)
+      console.log("response", response)
       return dispatch({ type: UserActionTypes.GET_USER, payload: response.data })
     } catch (error) {
-      handleError(error.message)
+      handleError(error)
       return dispatch({ type: UserActionTypes.GET_USER_ERROR, payload: "Error" })
     }
   }
@@ -42,11 +43,12 @@ export const deleteUser = (id: string) => {
   }
 }
 
-export const updateUser = (params: any) => {
+export const updateUser = (data: IUpdateUser) => {
   return async (dispatch: Dispatch<UserAction>) => {
     try {
+      console.log("params", data)
       dispatch({ type: UserActionTypes.UPDATE_USER_LOADING, payload: true })
-      const response = await axios.delete(`http://localhost:5000/users`, params)
+      const response = await axios.put(`http://localhost:5000/users/update`, data)
       return dispatch({ type: UserActionTypes.UPDATE_USER, payload: response.data })
     } catch (error) {
       return dispatch({ type: UserActionTypes.DELETE_USER_ERROR, payload: "Error" })

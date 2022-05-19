@@ -4,8 +4,14 @@ import React from 'react';
 import _ from "lodash"
 
 const handleError = (error: any) => {
-  const errorData = error.response.data
+  console.log("errror", error)
+  const errorData = error?.response?.data
 
+  if (!errorData) {
+   return  toast.error("Undefined error", {
+      position: toast.POSITION.TOP_RIGHT
+    });
+  }
   if (_.isArray(errorData)) {
     _.map(errorData, (elem) => {
       toast.error(elem.message, {

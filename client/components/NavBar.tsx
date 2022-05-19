@@ -17,7 +17,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import { useRouter } from "next/router";
 import { Button } from '@mui/material';
 import { useActions } from '../hooks/useAction';
-import UserInfoModal from './profile/USerInfoModal';
+import UserInfoModal from './profile/UserInfoModal';
 
 
 const menuItems = [
@@ -98,7 +98,7 @@ export default function NavBar() {
           ))}
         </List>
       </Drawer>
-      <UserInfoModal isOpen={isOpenProfileModal} setIsOpenModal={setIsOpenProfileModal} />
+      {isOpenProfileModal && <UserInfoModal isOpen={isOpenProfileModal} setIsOpenModal={setIsOpenProfileModal} />}
     </div>
   );
 }

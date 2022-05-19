@@ -3,9 +3,18 @@
 export interface IUser {
   _id: string;
   name: string;
+  lastName: string;
+  avatar?: string;
   email: string;
 }
 
+
+export interface IUpdateUser {
+  _id: string;
+  name?: string;
+  lastName?: string;
+  avatar?: string;
+}
 
 export interface UserState {
   users: IUser[],

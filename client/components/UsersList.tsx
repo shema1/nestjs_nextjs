@@ -22,15 +22,12 @@ interface UsrsListProps {
 
 const UsersList: React.FC<UsrsListProps> = ({ users, setSelectedUser, selecteduser }) => {
 
-  const { } = useActions()
 
   const onSelectUser = (id: string) => {
-    console.log("id", id)
     setSelectedUser(id)
   }
   const renderUsers = useMemo(() => {
     return _.map(users, (elem: IUser) => (
-      // <ListItem >
       <ListItemButton key={elem._id} alignItems="flex-start" style={{ backgroundColor: selecteduser === elem._id ? "#0000ff26" : "#fff" }} onClick={() => onSelectUser(elem._id)}>
         <ListItemAvatar>
           <Avatar alt={elem.name} src="/static/images/avatar/1.jpg" />
@@ -39,7 +36,6 @@ const UsersList: React.FC<UsrsListProps> = ({ users, setSelectedUser, selectedus
           primary={elem.name}
         />
       </ListItemButton>
-      // </ListItem>
     ))
   }, [users, selecteduser])
 

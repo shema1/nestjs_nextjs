@@ -30,11 +30,8 @@ interface LoginAction {
   type: AuthActionTypes.LOGIN
   payload: { 
     access_token:string, 
-    user: {
-      _id: string,
-      name: string,
-      email: string
-    }}
+    user:  IUser
+  }
 }
 
 interface SignupAction {

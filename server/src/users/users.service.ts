@@ -6,12 +6,14 @@ import { CreateUserkDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User, UserDocument } from "./schemas/user.schema";
 import { omit } from "lodash"
+import { FileService, FileType } from "src/file/file.service";
 var _ = require('lodash');
 @Injectable()
 export class UsersService {
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private fileService: FileService
   ) { }
 
   async createUser(dto: CreateUserkDto): Promise<User> {
@@ -20,7 +22,7 @@ export class UsersService {
   }
 
   async getUser(id: ObjectId | string): Promise<User> {
-    const user = await this.userModel.findById(id);
+    const user = await this.userModel.findById(id).select('-password');
     return user
   }
 
@@ -40,10 +42,19 @@ export class UsersService {
   }
 
 
-  async updateUser(id: ObjectId, dto: UpdateUserDto): Promise<User> {
-    await this.userModel.findByIdAndUpdate(id, dto)
-    const user = await this.userModel.findById(id)
-    return user
+  async updateUser(avatar: any, dto: UpdateUserDto): Promise<User> {
+    const user = await this.userModel.findByIdAndUpdate(dto._id, dto);
+
+    console.log("tiut avavtar", avatar)
+    if (avatar) {
+      const picturePath = this.fileService.createFile(FileType.IMAGE, avatar[0]);
+      await user.update({ $set: { avatar: picturePath } })
+      await user.save()
+    }
+
+
+    const updatedUser = await this.getUser(dto._id)
+    return updatedUser
   }
 
   async deleteUser(id: ObjectId): Promise<ObjectId> {
