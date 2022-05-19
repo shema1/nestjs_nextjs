@@ -11,6 +11,7 @@ export interface Message {
   sender: string
   recipient: string
   sendDate: string
+  isRead: boolean
 }
 @Schema()
 export class Chat {

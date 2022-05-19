@@ -26,11 +26,12 @@ export const setChatsFromSocket = (data: ICaht) => {
   }
 }
 
-export const createChat = (params: CreateChatDto) => {
+export const createChat = (params: CreateChatDto, callback: any) => {
   return async (dispatch: Dispatch<ChatActions>) => {
     try {
       const response = await axios.post('http://localhost:5000/chat', params)
       dispatch({ type: ChatActionTypes.CREATE_CHAT, payload: response.data })
+      callback(response.data._id)
     } catch (error) {
       console.log("error", error)
     }

@@ -4,6 +4,7 @@ import { ICaht } from '../../types/chat';
 import _ from "lodash"
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import dayjs from 'dayjs'
+import { Avatar } from '@mui/material';
 interface ChatMainProps {
   onSend: (recipientId: string, message: string) => void,
   messages: any[]
@@ -32,6 +33,11 @@ const ChatMain: NextPage<ChatMainProps> = ({ onSend, selectedChat, chats }) => {
     _.find(chats, elem => elem._id === selectedChat)
   ), [selectedChat, chats])
 
+
+  const sender = _.find(chat?.users, elem => elem._id === currentUser._id);
+
+  const recipient = _.find(chat?.users, elem => elem._id !== currentUser._id);
+
   const [message, setMessage] = useState("")
 
   const onChangeMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -39,8 +45,8 @@ const ChatMain: NextPage<ChatMainProps> = ({ onSend, selectedChat, chats }) => {
   }
 
   const sendNewMessage = () => {
-    const recipientId = _.find(chat?.users, elem => elem !== currentUser._id)
-    onSend(recipientId, message)
+    const recipient = _.find(chat?.users, elem => elem !== currentUser._id)
+    onSend(recipient._id, message)
     setMessage("")
   }
 
@@ -48,8 +54,8 @@ const ChatMain: NextPage<ChatMainProps> = ({ onSend, selectedChat, chats }) => {
     return _.map(chat?.messages, (elem, index) => (
       <li className="clearfix" key={`${elem.message}-${index}`}>
         <div className={`message-data ${currentUser._id === elem.sender ? "" : "align-right"}`}>
-          <span className="message-data-time" >{dayjs(elem.sendDate).isValid()? dayjs(elem.sendDate).format("HH:mm D MMM"): "10:10 AM, Today" }</span> &nbsp; &nbsp;
-          <span className="message-data-name" >Olia</span> <i className="fa fa-circle me"></i>
+          <span className="message-data-time" >{dayjs(elem.sendDate).isValid() ? dayjs(elem.sendDate).format("HH:mm D MMM") : "10:10 AM, Today"}</span> &nbsp; &nbsp;
+          <span className="message-data-name" >{currentUser._id === elem.sender ? sender?.name : recipient?.name}</span> <i className="fa fa-circle me"></i>
         </div>
         <div className={`message ${currentUser._id === elem.sender ? "my-message" : "other-message float-right"} `}>
           {elem.message}
@@ -64,14 +70,13 @@ const ChatMain: NextPage<ChatMainProps> = ({ onSend, selectedChat, chats }) => {
     <div className="chat">
       <div className="chat-header clearfix">
         {chat && (
-          <>
-            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
+          <div style={{display: "flex", alignItems: "center"}}>
+            <Avatar alt={recipient?.name + ' ' + recipient?.lastName} src={`http://localhost:5000/${recipient?.avatar}`} sx={{ width: 55, height: 55, }} />
             <div className="chat-about">
-              <div className="chat-with">Chat with Vincent Porter</div>
+              <div className="chat-with">Chat with {recipient?.name} {recipient?.lastName}</div>
               <div className="chat-num-messages">already {chat?.messages.length} messages</div>
             </div>
-            <i className="fa fa-star"></i>
-          </>
+          </div>
         )}
       </div>
 

@@ -1,3 +1,4 @@
+import { IUser } from "./user"
 
 
 
@@ -5,7 +6,8 @@ export interface ICaht {
   _id: string,
   mesage: IMessage[],
   sender: string,
-  recipient: string
+  recipient: string,
+  users: IUser[]
 }
 
 export interface IMessage {
@@ -60,6 +62,7 @@ interface setChatsFromSocketErrorActions {
   type: ChatActionTypes.SET_CHATS_FROM_SOCKETS,
   payload: ICaht
 }
+
 
 
 export type ChatActions = getChatsActions | getChatsLoadingActions | getChatsErrorActions | setChatsFromSocketErrorActions | createChatActions

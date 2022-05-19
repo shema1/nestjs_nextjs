@@ -25,9 +25,16 @@ export const chatReducer = (state = initState, action: ChatActions): ChatsState 
       }
 
     case ChatActionTypes.SET_CHATS_FROM_SOCKETS:
+      const updatedChatList = _.map(state.chats, (elem) => elem._id === action.payload._id ? action.payload : elem)
       return {
         ...state,
-        chats: [action.payload]
+        chats: updatedChatList
+      }
+
+    case ChatActionTypes.CREATE_CHAT:
+      return {
+        ...state,
+        chats: [...state.chats, action.payload]
       }
     default:
       return state;

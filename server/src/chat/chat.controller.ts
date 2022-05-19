@@ -30,6 +30,7 @@ export class ChatController {
 
   @Post()
   createChat(@Body() params: CreateChatDto) {
+    console.log("params", params)
     return this.chatService.createChat(params)
   }
 }

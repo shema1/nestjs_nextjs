@@ -24,6 +24,7 @@ const menuItems = [
   { text: 'Home', href: '/' },
   { text: 'Track list', href: '/tracks' },
   { text: 'Albums list', href: '/albums' },
+  { text: 'Chat', href: '/chat' },
 ]
 
 export default function NavBar() {

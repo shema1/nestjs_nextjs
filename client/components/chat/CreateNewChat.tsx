@@ -8,9 +8,10 @@ import UsersList from '../UsersList';
 
 interface CreateNewChatProps {
   setIsOpenModal: any,
-  isOpen: boolean
+  isOpen: boolean,
+  selectChat: any
 }
-const CreateNewChat: React.FC<CreateNewChatProps> = ({ setIsOpenModal, isOpen }) => {
+const CreateNewChat: React.FC<CreateNewChatProps> = ({ setIsOpenModal, isOpen, selectChat }) => {
 
 
   const { getUsers, createChat } = useActions()
@@ -23,8 +24,13 @@ const CreateNewChat: React.FC<CreateNewChatProps> = ({ setIsOpenModal, isOpen })
     getUsers()
   }, [])
 
+  const callback = (id: string) => {
+    selectChat(id)
+    setIsOpenModal(false)
+  }
+
   const createNewChat = () => {
-    createChat({ sender: currentUser._id, recipient: selecteduser })
+    createChat({ sender: currentUser._id, recipient: selecteduser }, callback)
   }
 
   return (
