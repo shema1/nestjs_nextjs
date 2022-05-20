@@ -58,7 +58,7 @@ const Chat: NextPage = () => {
     <ChatLayout>
       <div className="main">
         <div className="container clearfix">
-          <ChatUsersList chats={chats} selectChat={selectChat} />
+          <ChatUsersList chats={chats} selectChat={selectChat} selectedChat={selectedChat}/>
           <ChatMain onSend={onSend} messages={messages} chats={chats} selectedChat={selectedChat} />
         </div>
       </div>

@@ -10,9 +10,10 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 interface ChatUsersListProps {
   chats: ICaht[]
   selectChat: (id: string) => void
+  selectedChat: string
 }
 
-const ChatUsersList: NextPage<ChatUsersListProps> = ({ chats, selectChat }) => {
+const ChatUsersList: NextPage<ChatUsersListProps> = ({ chats, selectChat, selectedChat }) => {
 
   const [isOpenModal, setIsOpenModal] = React.useState(false);
 
@@ -43,11 +44,12 @@ const ChatUsersList: NextPage<ChatUsersListProps> = ({ chats, selectChat }) => {
     const recipient = _.find(chat?.users, elem => elem._id !== currentUser._id);
     return recipient.avatar ? `http://localhost:5000/${recipient.avatar}` : null
   }
+
   const handleOpenModal = () => setIsOpenModal(true);
 
   const renderChats = () => {
     return _.map(chats, elem => (
-      <li className="clearfix" onClick={(e) => openChat(e, elem._id)}>
+      <li className="clearfix" onClick={(e) => openChat(e, elem._id)} style={{ backgroundColor: elem._id === selectedChat ? "#0000ff91" : "" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Badge color="secondary" badgeContent={getUnreadMessagesCount(elem)}>
             <Avatar alt={getUserName(elem)} src={getUserAvatar(elem)} sx={{ width: 55, height: 55, }} />
