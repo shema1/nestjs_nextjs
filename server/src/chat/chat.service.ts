@@ -1,12 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Chat, ChatDocument, Message } from "./schemas/chat.schema";
+import { Chat, ChatDocument } from "./schemas/chat.schema";
 import { Model, ObjectId } from "mongoose";
 import { Request } from "express";
 import { AuthService } from "src/auth/auth.service";
 import { UsersService } from "src/users/users.service";
 import { CreateChatDto } from "./dto/create-chat.dto";
-
+import _ from "lodash"
+import { IMessage } from "./schemas/message.schema";
 @Injectable()
 export class ChatService {
   constructor(
@@ -29,17 +30,44 @@ export class ChatService {
     return chats
   }
 
+  async readMessages(request: Request, chatId: ObjectId,): Promise<Chat> {
+    const jwt = request.headers.authorization.replace(/Bearer /i, '');
+    const decodeUser = await this.authService.decode(jwt);
+    const chat = await this.chatModel.findById(chatId);
+
+    try {
+      const updatedChat = await this.chatModel.findByIdAndUpdate(
+        chatId,
+        {
+          $set: {
+            'messages.$[element].isRead': true
+          }
+        },
+        {
+          arrayFilters: [{
+            'element.sender': decodeUser._id
+          }],
+          new: true
+        }
+      )
+
+      return updatedChat
+    } catch (error) {
+      console.log("error", error)
+    }
+
+  }
+
   async getChat(id: ObjectId): Promise<Chat> {
     return await this.chatModel.findById(id).populate("users", "-chats")
   }
 
-  async addMessage(message: Message): Promise<Chat> {
-    console.log("message", message)
-    const chat = await this.chatModel.findByIdAndUpdate(message.chatId, { $push: { messages: message } })
+  async addMessage(message: IMessage): Promise<Chat> {
+    // _id: mongoose.Types.ObjectId() 
+    await this.chatModel.findByIdAndUpdate(message.chatId, { $push: { messages: { ...message, isRead: false } }})
     const updatedChat = await this.chatModel.findById(message.chatId).populate("users")
-    // console.log("updatedChat", updatedChat)
     return updatedChat
-  }
+  } 
 
   async setUsersToChat(chatId: string, senderId: ObjectId, recipientId: ObjectId): Promise<void> {
     await this.chatModel.findByIdAndUpdate(chatId, { $push: { users: { $each: [senderId, recipientId] } } }, { new: true, useFindAndModify: false })

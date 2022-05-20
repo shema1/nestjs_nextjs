@@ -33,4 +33,11 @@ export class ChatController {
     console.log("params", params)
     return this.chatService.createChat(params)
   }
+
+  @Post('/readmessages')
+  readMessages(@Req() request: Request, @Body() params: any) {
+    console.log("chatId", params.chatId)
+    // console.log("request", request)
+    return this.chatService.readMessages(request, params.chatId);
+  }
 }

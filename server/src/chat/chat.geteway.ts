@@ -2,8 +2,8 @@ import { NestGateway } from "@nestjs/websockets/interfaces/nest-gateway.interfac
 import { WebSocketGateway, ConnectedSocket, MessageBody, SubscribeMessage, OnGatewayConnection, WebSocketServer } from "@nestjs/websockets"
 import { ChatService } from "./chat.service"
 import { Bind } from "@nestjs/common";
-import { Chat, Message } from "./schemas/chat.schema";
 import { Server, Socket } from 'socket.io';
+import { IMessage } from "./schemas/message.schema";
 
 @WebSocketGateway({ cors: true })
 export class ChatGeteway implements OnGatewayConnection {
@@ -37,12 +37,12 @@ export class ChatGeteway implements OnGatewayConnection {
 
   @Bind(MessageBody(), ConnectedSocket())
   @SubscribeMessage('chat')
-  async handleNewMessage(message: Message, socket: any) {
-    // console.log("socket", socket)
+  async handleNewMessage(message: IMessage, socket: any) {
+    console.log("socket", socket)
     // console.log('message', message);
     const result = await this.chatService.addMessage(message)
 
-    
+
 
     // console.log("result", result)
     // socket.emit('newChat', result)

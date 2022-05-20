@@ -33,6 +33,15 @@ const ChatUsersList: NextPage<ChatUsersListProps> = ({ chats, selectChat }) => {
     return recipient.name + " " + recipient.lastName
   }
 
+  const getUnreadMessagesCount = (chat: ICaht) => {
+    console.log("chat", chat)
+    const senderMessages = _.filter(chat.messages, (elem) => elem.sender !== currentUser._id);
+    console.log("senderMessages", senderMessages);
+    const count = _.filter(senderMessages, (elem) => elem.isRead === false);
+    console.log("count", count);
+    return count?.length
+  }
+
   const getUserAvatar = (chat: ICaht) => {
     const recipient = _.find(chat?.users, elem => elem._id !== currentUser._id);
     return recipient.avatar ? `http://localhost:5000/${recipient.avatar}` : null
@@ -47,7 +56,7 @@ const ChatUsersList: NextPage<ChatUsersListProps> = ({ chats, selectChat }) => {
           <div className="about">
             <div className="name">{getUserName(elem)}</div>
             <div className="status">
-              <i className="fa fa-circle online"></i> online
+              <i className="fa fa-circle online"></i> online {getUnreadMessagesCount(elem)}
             </div>
           </div>
         </div>

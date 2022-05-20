@@ -4,7 +4,7 @@ import { IUser } from "./user"
 
 export interface ICaht {
   _id: string,
-  mesage: IMessage[],
+  messages: IMessage[],
   sender: string,
   recipient: string,
   users: IUser[]

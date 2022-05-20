@@ -2,23 +2,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { User } from 'src/users/schemas/user.schema';
-
+import { IMessage, MessageSchema } from './message.schema';
 export type ChatDocument = Chat & Document
 
-export interface Message {
-  chatId: string
-  message: string
-  sender: string
-  recipient: string
-  sendDate: string
-  isRead: boolean
-}
 @Schema()
 export class Chat {
 
   _id: string
-  @Prop()
-  messages: Message[]
+  @Prop({ type: [MessageSchema], default: [] })
+  messages: IMessage[]
   @Prop()
   sender: string
   @Prop()
