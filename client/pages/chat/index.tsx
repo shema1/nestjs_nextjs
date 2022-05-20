@@ -19,6 +19,11 @@ const Chat: NextPage = () => {
 
   const [selectedChat, setSelectedChat] = useState(null)
 
+
+  useEffect(() => {
+
+  }, [])
+
   useEffect(() => {
     getChats()
     socket.on("newChat", data => {

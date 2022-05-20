@@ -24,6 +24,7 @@ export const chatReducer = (state = initState, action: ChatActions): ChatsState 
         error: action.payload
       }
 
+    case ChatActionTypes.READ_MESSAGES:
     case ChatActionTypes.SET_CHATS_FROM_SOCKETS:
       const updatedChatList = _.map(state.chats, (elem) => elem._id === action.payload._id ? action.payload : elem)
       return {

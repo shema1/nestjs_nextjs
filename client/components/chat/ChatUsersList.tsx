@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import React, { SyntheticEvent } from 'react';
 import { ICaht } from '../../types/chat';
 import _ from "lodash"
-import { Avatar, Button } from '@mui/material';
+import { Avatar, Badge, Button } from '@mui/material';
 import Modal from '../Modal';
 import UsersList from '../UsersList';
 import CreateNewChat from './CreateNewChat';
@@ -34,11 +34,8 @@ const ChatUsersList: NextPage<ChatUsersListProps> = ({ chats, selectChat }) => {
   }
 
   const getUnreadMessagesCount = (chat: ICaht) => {
-    console.log("chat", chat)
     const senderMessages = _.filter(chat.messages, (elem) => elem.sender !== currentUser._id);
-    console.log("senderMessages", senderMessages);
     const count = _.filter(senderMessages, (elem) => elem.isRead === false);
-    console.log("count", count);
     return count?.length
   }
 
@@ -52,11 +49,13 @@ const ChatUsersList: NextPage<ChatUsersListProps> = ({ chats, selectChat }) => {
     return _.map(chats, elem => (
       <li className="clearfix" onClick={(e) => openChat(e, elem._id)}>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Avatar alt={getUserName(elem)} src={getUserAvatar(elem)} sx={{ width: 55, height: 55, }} />
+          <Badge color="secondary" badgeContent={getUnreadMessagesCount(elem)}>
+            <Avatar alt={getUserName(elem)} src={getUserAvatar(elem)} sx={{ width: 55, height: 55, }} />
+          </Badge>
           <div className="about">
             <div className="name">{getUserName(elem)}</div>
             <div className="status">
-              <i className="fa fa-circle online"></i> online {getUnreadMessagesCount(elem)}
+              <i className="fa fa-circle online"></i> online
             </div>
           </div>
         </div>

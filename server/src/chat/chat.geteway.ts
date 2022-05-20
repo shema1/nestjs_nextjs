@@ -38,7 +38,7 @@ export class ChatGeteway implements OnGatewayConnection {
   @Bind(MessageBody(), ConnectedSocket())
   @SubscribeMessage('chat')
   async handleNewMessage(message: IMessage, socket: any) {
-    console.log("socket", socket)
+    // console.log("socket", socket)
     // console.log('message', message);
     const result = await this.chatService.addMessage(message)
 

@@ -34,9 +34,9 @@ export class ChatService {
     const jwt = request.headers.authorization.replace(/Bearer /i, '');
     const decodeUser = await this.authService.decode(jwt);
     const chat = await this.chatModel.findById(chatId);
-
+    console.log("decodeUser._id", decodeUser._id)
     try {
-      const updatedChat = await this.chatModel.findByIdAndUpdate(
+      await this.chatModel.findByIdAndUpdate(
         chatId,
         {
           $set: {
@@ -45,13 +45,13 @@ export class ChatService {
         },
         {
           arrayFilters: [{
-            'element.sender': decodeUser._id
+            'element.recipient': decodeUser._id
           }],
           new: true
         }
       )
 
-      return updatedChat
+      return await this.chatModel.findById(chatId).populate("users");
     } catch (error) {
       console.log("error", error)
     }
@@ -64,10 +64,11 @@ export class ChatService {
 
   async addMessage(message: IMessage): Promise<Chat> {
     // _id: mongoose.Types.ObjectId() 
-    await this.chatModel.findByIdAndUpdate(message.chatId, { $push: { messages: { ...message, isRead: false } }})
+    console.log("message", message)
+    await this.chatModel.findByIdAndUpdate(message.chatId, { $push: { messages: { ...message, isRead: false } } })
     const updatedChat = await this.chatModel.findById(message.chatId).populate("users")
     return updatedChat
-  } 
+  }
 
   async setUsersToChat(chatId: string, senderId: ObjectId, recipientId: ObjectId): Promise<void> {
     await this.chatModel.findByIdAndUpdate(chatId, { $push: { users: { $each: [senderId, recipientId] } } }, { new: true, useFindAndModify: false })
@@ -107,7 +108,7 @@ export class ChatService {
       //     // await recipient.save()
       // }
     } catch (error) {
-      console.log(" error", error)
+      console.log("error", error)
     }
 
   }

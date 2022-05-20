@@ -37,3 +37,14 @@ export const createChat = (params: CreateChatDto, callback: any) => {
     }
   }
 }
+
+export const readMessages = (chatId: string) => {
+  return async (dispatch: Dispatch<ChatActions>) => {
+    try {
+      const response = await axios.post('http://localhost:5000/chat/readmessages', { chatId })
+      dispatch({ type: ChatActionTypes.READ_MESSAGES, payload: response.data })
+    } catch (error) {
+      console.log("error", error)
+    }
+  }
+}
