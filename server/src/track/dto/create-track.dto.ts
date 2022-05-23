@@ -1,14 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty } from "class-validator";
 
 export class CreateTrackDto {
+  @IsNotEmpty()
   @ApiProperty({ example: 'name' })
-  readonly name;
+  name;
 
+  @IsNotEmpty()
   @ApiProperty({ example: 'artist' })
-  readonly artist;
+  artist;
 
-  @ApiProperty({ example: 'text'})
-  readonly text;
+  @IsNotEmpty()
+  @ApiProperty({ example: 'text' })
+  text;
 }
 
 export class CreateTrackFileDto {

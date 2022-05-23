@@ -8,7 +8,11 @@ export const useInput = (initialValue) => {
     setValue(e.target.value)
   }
 
+  const onClear = () => {
+    setValue("")
+  }
+
   return {
-    value, onChange
+    value, onChange, onClear
   }
 }

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import * as mongoose from 'mongoose'
-import {Document} from 'mongoose';
+import { Document } from 'mongoose';
 import { Track } from "./track.schema";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -18,9 +18,11 @@ export class Comment {
   text: string;
 
   @ApiProperty({ example: '6262aba2761d957e6e06b47b' })
-  @Prop({type: mongoose.Schema.Types.ObjectId, ref: "Track"  })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Track" })
   track: Track;
 
+  @Prop({ type: Date, default: Date.now })
+  date
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment)

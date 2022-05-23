@@ -1,4 +1,4 @@
-import { Button, Grid, TextField } from "@mui/material";
+import { Avatar, Button, Grid, TextField } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import MainLayout from "../../layouts/MainLayout";
 import { ITrack } from "../../types/track";
 import axios from "axios";
 import { useInput } from "../../hooks/useInput";
-
+import dayjs from 'dayjs'
 interface TrackPageProps {
   serverTrack: ITrack
 }
@@ -35,6 +35,8 @@ const TrackPage: React.FC<TrackPageProps> = ({ serverTrack }) => {
         trackId: track._id
       })
       setTrack({ ...track, comments: [...track.comments, response.data] })
+      username.onClear();
+      comment.onClear();
     } catch (error) {
       console.log("error", error)
     }
@@ -68,6 +70,7 @@ const TrackPage: React.FC<TrackPageProps> = ({ serverTrack }) => {
           label="Comment"
           fullWidth
           multiline
+          style={{ marginTop: 15 }}
           rows={4}
         />
         <Button onClick={addComment}>
@@ -76,10 +79,20 @@ const TrackPage: React.FC<TrackPageProps> = ({ serverTrack }) => {
       </Grid>
       <div>
         {track?.comments.map(comment =>
-          <div key={comment?._id}>
-            <div>Author - {comment?.username}</div>
-            <div>{comment?.text}</div>
-          </div>
+          <Grid container wrap="nowrap" spacing={2} key={comment?._id}>
+            <Grid item>
+              <Avatar alt="Remy Sharp" src={""} />
+            </Grid>
+            <Grid justifyContent="left" item xs zeroMinWidth>
+              <h4 style={{ margin: 0, textAlign: "left" }}>{comment?.username}</h4>
+              <p style={{ textAlign: "left" }}>
+                {comment?.text}
+              </p>
+              <p style={{ textAlign: "left", color: "gray" }}>
+                {dayjs(comment?.date).format("HH:mm D MMM")}
+              </p>
+            </Grid>
+          </Grid>
         )}
       </div>
     </MainLayout>

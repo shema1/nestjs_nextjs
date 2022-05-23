@@ -51,6 +51,7 @@ export class TrackController {
   })
   create(@UploadedFiles() files: CreateTrackFileDto, @Body() dto: CreateTrackDto) {
     const { picture, audio } = files
+    console.log("dto", dto)
     return this.trackService.create(dto, picture[0], audio[0])
   }
 
