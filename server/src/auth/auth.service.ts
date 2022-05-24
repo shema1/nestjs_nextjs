@@ -25,9 +25,9 @@ export class AuthService {
     return passwordIsValid ? user : null;
   }
 
-  async login(user: User): Promise<{ access_token: string, user: any }> {
+  async login(user: User): Promise<{ access_token: string, user: any, refresh_token: string }> {
     const payload = { _id: user._id, name: user.name, email: user.email, lastName: user.lastName, avatar: user.avatar }
-    return { access_token: this.jwtService.sign(payload), user: payload }
+    return { access_token: this.jwtService.sign(payload), refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), user: payload }
   }
 
   async registration(dto: CreateUserkDto): Promise<User> {
@@ -41,8 +41,9 @@ export class AuthService {
 
   async verify(token: string): Promise<User> {
     const decoded = this.jwtService.verify(token, {
-      secret: jwtSecret
+      secret: jwtSecret,
     })
+
     const user = this.usersService.getUserByEmail(decoded.email);
 
     if (!user) {

@@ -1,6 +1,5 @@
 import axios from "axios";
 import _ from "lodash";
-import { useSelector } from "react-redux";
 import { RootState } from "../store/reducers";
 
 const configAxios = (store) => {
