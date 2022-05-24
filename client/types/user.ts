@@ -6,8 +6,14 @@ export interface IUser {
   lastName: string;
   avatar?: string;
   email: string;
+  role: string;
 }
 
+export enum UserRole {
+  ADMIN = "1",
+  CREATOR = "2",
+  USER = "3"
+}
 
 export interface IUpdateUser {
   _id: string;

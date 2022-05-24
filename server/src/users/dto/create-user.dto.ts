@@ -24,4 +24,8 @@ export class CreateUserkDto {
   @Length(4, 16, { message: "Min pasword length 4 symbol" })
   @IsNotEmpty({ message: "password is required" })
   readonly password;
+
+  @ApiProperty({ example: '1', required: true })
+  @IsNotEmpty({ message: "role is required" })
+  readonly role
 }

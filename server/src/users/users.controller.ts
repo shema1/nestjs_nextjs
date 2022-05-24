@@ -3,6 +3,9 @@ import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ObjectId } from 'mongoose'
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { RolesGuard } from "src/auth/guards/roles.guard";
+import { Roles } from "src/decorators/roles.decorators";
+import { Role } from "src/enum/role.enum";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./schemas/user.schema";
 import { UsersService } from "./users.service";
@@ -25,7 +28,8 @@ export class UsersController {
   // }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, type: [User] })
   getUsers() {

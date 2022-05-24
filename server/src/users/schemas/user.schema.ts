@@ -3,6 +3,7 @@ import { Document, Types } from 'mongoose';
 import { ApiProperty } from "@nestjs/swagger";
 import { Chat, ChatSchema } from "src/chat/schemas/chat.schema";
 import { Exclude } from "class-transformer";
+import { Role } from "src/enum/role.enum";
 
 export type UserDocument = User & Document
 
@@ -31,8 +32,9 @@ export class User {
   @Prop()
   password: string;
 
-  // @Prop({ type: [{ type: Types.ObjectId, ref: "chat" }] })
-  // chats: Chat[];
+  @Prop({ default: Role.USER })
+  role: Role
+
   @Prop({ type: [{ type: Types.ObjectId, required: false, ref: () => "Chat" }] })
   chats: Chat[];
 }

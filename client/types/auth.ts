@@ -18,6 +18,7 @@ export interface ISignUp {
   name: string;
   lastName: string;
   password: string;
+  role: string;
 }
 
 export enum AuthActionTypes {
@@ -28,9 +29,9 @@ export enum AuthActionTypes {
 
 interface LoginAction {
   type: AuthActionTypes.LOGIN
-  payload: { 
-    access_token:string, 
-    user:  IUser
+  payload: {
+    access_token: string,
+    user: IUser
   }
 }
 

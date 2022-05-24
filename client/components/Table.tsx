@@ -27,7 +27,6 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
   };
 
   const renderRow = (item, index) => {
-    console.log("item 2", item)
     return (
       <TableRow key={index}>
         {renderColumns(item)}
@@ -71,7 +70,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
 
   return (
     <MainLayout>
-      <Paper isPadding={false} >
+      <Paper>
         {/* {renderTitle()} */}
         {/* {isLoading && renderLoading} */}
         <TableContainer>
