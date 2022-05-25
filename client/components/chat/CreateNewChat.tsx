@@ -1,12 +1,13 @@
 import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useActions } from '../../hooks/useAction';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
 import Modal from '../Modal';
 import UsersList from '../UsersList';
 import _ from "lodash"
 import { IUser } from '../../types/user';
 import { ICaht } from '../../types/chat';
+import { useDispatch, useSelector } from 'react-redux';
+import { chatActionCreators, userActionCreators } from '../../store/actions-creators';
+import { authSelector, chatSelector, userSelector } from '../../store/selectors';
 
 interface CreateNewChatProps {
   setIsOpenModal: any,
@@ -15,17 +16,16 @@ interface CreateNewChatProps {
 }
 const CreateNewChat: React.FC<CreateNewChatProps> = ({ setIsOpenModal, isOpen, selectChat }) => {
 
+  const dispatch = useDispatch();
 
-  const { getUsers, createChat } = useActions()
-  const { users } = useTypedSelector(state => state.user);
-  const { currentUser } = useTypedSelector(state => state.auth);
-  const { chats } = useTypedSelector(state => state.chat);
+  const getUsers = () => dispatch(userActionCreators.getUsers());
+  const createChat = (params: any, callback: any) => dispatch(chatActionCreators.createChat(params, callback));
+
+  const users = useSelector(userSelector.getUsersList);
+  const currentUser = useSelector(authSelector.getUser);
+  const chats = useSelector(chatSelector.getChatsList);
 
   const [selecteduser, setSelectedUser] = useState(null)
-
-  // const isContainInChat = (chat: ICaht) => {
-  //   return (chat?.sender || chat.recipient) === currentUser?._id ? false || true
-  // }
 
   const userList = _.filter(users, (elem: IUser) => elem?._id !== currentUser?._id)
 

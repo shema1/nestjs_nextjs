@@ -1,8 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { pauseTrack, playTrack, setCurrentTime, setVolume } from "../store/actions-creators/player";
-import { useTypedSelector } from "./useTypedSelector";
-
 
 let audio
 

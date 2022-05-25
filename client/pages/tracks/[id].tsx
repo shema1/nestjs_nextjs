@@ -1,13 +1,13 @@
 import { Avatar, Button, Grid, TextField } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { useActions } from "../../hooks/useAction";
+import React, { useState } from "react";
 import MainLayout from "../../layouts/MainLayout";
 import { ITrack } from "../../types/track";
 import axios from "axios";
 import { useInput } from "../../hooks/useInput";
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
+
 interface TrackPageProps {
   serverTrack: ITrack
 }
@@ -18,14 +18,11 @@ const TrackPage: React.FC<TrackPageProps> = ({ serverTrack }) => {
   const [track, setTrack] = useState<ITrack>(serverTrack);
 
   const username = useInput('');
-  const comment = useInput('')
+  const comment = useInput('');
 
   const onBack = () => {
-    router.back()
+    router.back();
   }
-
-
-
 
   const addComment = async () => {
     try {
@@ -40,7 +37,6 @@ const TrackPage: React.FC<TrackPageProps> = ({ serverTrack }) => {
     } catch (error) {
       console.log("error", error)
     }
-
   }
 
   return (

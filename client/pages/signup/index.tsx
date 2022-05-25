@@ -2,22 +2,25 @@ import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@m
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import { useActions } from "../../hooks/useAction";
+import { useDispatch } from "react-redux";
 import { useInput } from "../../hooks/useInput";
+import { authActionCreators } from "../../store/actions-creators";
 import styles from '../../styles/Login.module.scss';
 import { UserRole } from "../../types/user";
 
 const SignupPage: NextPage = () => {
+
+  const dispatch = useDispatch();
+
+
   const router = useRouter();
-  const email = useInput("")
-  const name = useInput("")
-  const lastName = useInput("")
-  const password = useInput("")
-  const role = useInput("")
+  const email = useInput("");
+  const name = useInput("");
+  const lastName = useInput("");
+  const password = useInput("");
+  const role = useInput("");
 
-
-  const { registration } = useActions()
-
+  const registration = (params, callback) => dispatch(authActionCreators.registration(params, callback))
 
   const callback = () => {
     router.push({

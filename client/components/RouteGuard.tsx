@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useTypedSelector } from '../hooks/useTypedSelector';
+import { useSelector } from 'react-redux';
+import { authSelector } from '../store/selectors';
 export { RouteGuard };
 
 function RouteGuard({ children }) {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
 
-  const { isLogin } = useTypedSelector(state => state.auth);
+  const { isLogin } = useSelector(authSelector.getAuthState)
 
   // // const isLogin = false
   // useEffect(() => {

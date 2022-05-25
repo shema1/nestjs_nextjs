@@ -1,10 +1,11 @@
-import { Avatar, Badge, Button, IconButton, TextField } from '@mui/material';
+import { Avatar, Button, IconButton, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useActions } from '../../hooks/useAction';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
 import Modal from '../Modal';
 import _ from "lodash";
 import FileUpload from '../FileUpload';
+import { useDispatch, useSelector } from 'react-redux';
+import { authSelector, userSelector } from '../../store/selectors';
+import { userActionCreators } from '../../store/actions-creators';
 
 interface UserInfoModalProps {
   setIsOpenModal: (isOpen: boolean) => void,
@@ -13,19 +14,23 @@ interface UserInfoModalProps {
 }
 const UserInfoModal: React.FC<UserInfoModalProps> = ({ setIsOpenModal, isOpen, userId }) => {
 
-  const { currentUser } = useTypedSelector(state => state.auth);
+  const dispatch = useDispatch();
 
-  const { users } = useTypedSelector(state => state.user);
+  const currentUser = useSelector(authSelector.getUser);
 
-  const { getUser, updateUser } = useActions()
+  const users = useSelector(userSelector.getUsersList);
+
+  const getUser = (id: string) => dispatch(userActionCreators.getUser(id));
+
+  const updateUser = (data: FormData, callback: any) => dispatch(userActionCreators.updateUser(data, callback));
 
   const [userInfo, setUserInfo] = useState(null);
 
-  const [picture, setPicture] = useState(null)
+  const [picture, setPicture] = useState(null);
 
-  const id = userId ? userId : currentUser?._id
+  const id = userId ? userId : currentUser?._id;
 
-  const userById = _.find(users, ["_id", id])
+  const userById = _.find(users, ["_id", id]);
 
   const onCancel = () => {
     setIsOpenModal(false)

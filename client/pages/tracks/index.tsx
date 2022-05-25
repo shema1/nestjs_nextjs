@@ -5,23 +5,23 @@ import { Box } from "@mui/system";
 import _ from "lodash"
 import { Button, Card, Grid } from "@mui/material";
 import TrackList from "../../components/TrackList";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
 import MainLayout from "../../layouts/MainLayout";
 import { RootState } from '../../store/reducers';
-import { TrackActionTypes } from "../../types/track";
 import { getTracks } from "../../store/actions-creators/track";
-import useActionDeps from "../../hooks/useActionDeps";
+import { useDispatch, useSelector } from "react-redux";
+import { trackSelector } from "../../store/selectors";
 
 const Tracks: NextPage<RootState> = () => {
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const getTracksList = useActionDeps(() => getTracks())
-  const { tracks, trackLoading } = useTypedSelector(state => state.track);
+  const getTracksList = () => dispatch(getTracks());
 
-  const isLoadingTracks = _.get(trackLoading, TrackActionTypes.GET_TRACKS_LOADING)
-  const isLoadingDeleteTrack = _.get(trackLoading, TrackActionTypes.REMOVE_TRACK_LOADING)
+  const tracks = useSelector(trackSelector.getTrackList);
 
+  const isLoadingTracks = useSelector(trackSelector.tracksIsLoading);
+  const isLoadingDeleteTrack = useSelector(trackSelector.removeTracksIsLoading);
 
   const onClickAddTrack = () => {
     router.push('/tracks/create')
@@ -29,7 +29,7 @@ const Tracks: NextPage<RootState> = () => {
 
   useEffect(() => {
     getTracksList();
-  })
+  }, []);
 
   return (
     <MainLayout>

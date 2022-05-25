@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,8 +15,9 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { useRouter } from "next/router";
 import { Button } from '@mui/material';
-import { useActions } from '../hooks/useAction';
 import UserInfoModal from './profile/UserInfoModal';
+import { useDispatch } from 'react-redux';
+import { logout } from '../store/actions-creators/auth';
 
 
 const menuItems = [
@@ -32,8 +32,9 @@ export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [isOpenProfileModal, setIsOpenProfileModal] = useState(false);
 
+  const dispatch = useDispatch();
   const router = useRouter()
-  const { logout } = useActions()
+  const exit = () => dispatch(logout())
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -44,7 +45,7 @@ export default function NavBar() {
   };
 
   const onLogout = () => {
-    logout()
+    exit()
     router.push({
       pathname: '/login'
     })

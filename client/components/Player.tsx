@@ -1,20 +1,29 @@
 import { Pause, PlayArrow, VolumeUp } from '@mui/icons-material';
 import { Grid, IconButton } from '@mui/material';
 import React, { ChangeEvent, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useActions } from '../hooks/UseAction';
+import { useDispatch, useSelector } from 'react-redux';
 import { playerSelector } from '../store/selectors';
 import styles from '../styles/Player.module.scss';
 import TrackProgress from './TrackProgress';
+import { playerActionCreators } from "../store/actions-creators";
 
 interface PlayerProps {
 
 }
+
 let audio
+
 const Player: React.FC<PlayerProps> = () => {
-  
+
+  const dispatch = useDispatch();
+
   const { pause, volume, active, duration, currentTime } = useSelector(playerSelector.getPlayerState);
-  const { pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack } = useActions();
+
+  const pauseTrack = () => dispatch(playerActionCreators.pauseTrack());
+  const playTrack = () => dispatch(playerActionCreators.playTrack());
+  const setVolume = (volume: number) => dispatch(playerActionCreators.setVolume(volume));
+  const setCurrentTime = (time: number) => dispatch(playerActionCreators.setCurrentTime(time));
+  const setDuration = (duration: number) => dispatch(playerActionCreators.setDuration(duration));
 
   useEffect(() => {
     if (!audio) {
@@ -30,7 +39,6 @@ const Player: React.FC<PlayerProps> = () => {
       pause ? audio.pause() : audio.play()
     }
   }, [pause, active])
-
 
   const setAudio = () => {
     if (active) {

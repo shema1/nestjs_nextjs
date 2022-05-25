@@ -2,19 +2,21 @@ import { Button, TextField } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import { useActions } from "../../hooks/useAction";
+import { useDispatch } from "react-redux";
 import { useInput } from "../../hooks/useInput";
+import { authActionCreators } from "../../store/actions-creators";
 import styles from '../../styles/Login.module.scss';
 
 
 const Login: NextPage = () => {
 
+  const dispatch = useDispatch();
+
   const router = useRouter();
-  const email = useInput("")
-  const password = useInput("")
+  const email = useInput("");
+  const password = useInput("");
 
-  const { login } = useActions()
-
+  const login = (data, callback) => dispatch(authActionCreators.login(data, callback));
 
   const callback = () => {
     router.push({
@@ -23,7 +25,7 @@ const Login: NextPage = () => {
   }
 
   const onLogin = () => {
-    login({ email: email.value, password: password.value }, callback)
+    login({ email: email.value, password: password.value }, callback);
   }
 
   const onSignUp = () => {

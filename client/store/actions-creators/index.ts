@@ -1,17 +1,13 @@
-import * as PlayerActionCreators from '../actions-creators/player'
-import * as TrackActionCreators from '../actions-creators/track'
-import * as AuthActionCreators from '../actions-creators/auth'
-import * as ChatActionCreators from '../actions-creators/chats'
-import * as UserActionCreators from '../actions-creators/user'
+import * as playerActionCreators from '../actions-creators/player'
+import * as trackActionCreators from '../actions-creators/track'
+import * as authActionCreators from '../actions-creators/auth'
+import * as chatActionCreators from '../actions-creators/chats'
+import * as userActionCreators from '../actions-creators/user'
 
-
-
-
-
-export default {
-  ...PlayerActionCreators,
-  ...TrackActionCreators,
-  ...AuthActionCreators,
-  ...ChatActionCreators,
-  ...UserActionCreators
+export {
+  playerActionCreators,
+  trackActionCreators,
+  authActionCreators,
+  chatActionCreators,
+  userActionCreators
 }

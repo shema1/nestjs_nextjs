@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NextPage } from 'next';
 import dayjs from 'dayjs'
 import _ from "lodash"
 import { ICaht } from '../../types/chat';
 import { Avatar } from '@mui/material';
-import { useActions } from '../../hooks/useAction';
 import { authSelector, chatSelector } from '../../store/selectors';
 import { RootState } from '../../store/reducers';
+import { chatActionCreators } from '../../store/actions-creators';
 
 interface ChatMainProps {
   onSend: (recipientId: string, message: string) => void,
@@ -17,7 +17,9 @@ interface ChatMainProps {
 
 const ChatMain: NextPage<ChatMainProps> = ({ onSend, selectedChat, chats }) => {
 
-  const { readMessages } = useActions()
+  const dispatch = useDispatch();
+
+  const readMessages = (chatId: string) => dispatch(chatActionCreators.readMessages(chatId))
 
   const currentUser = useSelector(authSelector.getUser);
   const chat = useSelector((state: RootState) => chatSelector.getChatById(state, selectedChat))

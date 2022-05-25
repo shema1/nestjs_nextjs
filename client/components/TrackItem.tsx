@@ -1,12 +1,12 @@
 import { Card, Grid, IconButton } from "@mui/material";
-import React, { SyntheticEvent, useEffect } from "react";
+import React, { SyntheticEvent } from "react";
 import { ITrack } from "../types/track";
 import styles from '../styles/TrackItem.module.scss'
 import { Delete, Pause, PlayArrow } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import { useActions } from "../hooks/UseAction";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { playerSelector } from "../store/selectors";
+import { playerActionCreators, trackActionCreators } from "../store/actions-creators";
 
 interface TrackItemProps {
   track: ITrack
@@ -15,9 +15,14 @@ interface TrackItemProps {
 const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const { playTrack, pauseTrack, setActiveTrack, removeTrack } = useActions()
-  const { pause, volume, active, duration, currentTime } = useSelector(playerSelector.getPlayerState);
+  const { pause, active } = useSelector(playerSelector.getPlayerState);
+
+  const pauseTrack = () => dispatch(playerActionCreators.pauseTrack());
+  const playTrack = () => dispatch(playerActionCreators.playTrack());
+  const setActiveTrack = (track: ITrack) => dispatch(playerActionCreators.setActiveTrack(track));
+  const removeTrack = (id: string) => dispatch(trackActionCreators.removeTrack(id));
 
   const openTrackInfo = () => {
     router.push(`/tracks/${track._id}`)
@@ -33,7 +38,6 @@ const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
     e.stopPropagation();
     pauseTrack()
   }
-
 
   const deleteTrack = (e: SyntheticEvent, id: string) => {
     e.stopPropagation()
