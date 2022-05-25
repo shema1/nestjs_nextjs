@@ -1,21 +1,22 @@
-import { Button, Card, Grid } from "@mui/material";
-import { Box } from "@mui/system";
-import { NextPage } from "next";
-import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import { useRouter } from "next/router";
+import { NextPage } from "next";
+import { Box } from "@mui/system";
+import _ from "lodash"
+import { Button, Card, Grid } from "@mui/material";
 import TrackList from "../../components/TrackList";
-import { useActions } from "../../hooks/UseAction";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import MainLayout from "../../layouts/MainLayout";
 import { RootState } from '../../store/reducers';
-import _ from "lodash"
 import { TrackActionTypes } from "../../types/track";
+import { getTracks } from "../../store/actions-creators/track";
+import useActionDeps from "../../hooks/useActionDeps";
+
 const Tracks: NextPage<RootState> = () => {
 
   const router = useRouter();
 
-  const { getTracks } = useActions()
-
+  const getTracksList = useActionDeps(() => getTracks())
   const { tracks, trackLoading } = useTypedSelector(state => state.track);
 
   const isLoadingTracks = _.get(trackLoading, TrackActionTypes.GET_TRACKS_LOADING)
@@ -27,8 +28,8 @@ const Tracks: NextPage<RootState> = () => {
   }
 
   useEffect(() => {
-    getTracks()
-  }, [])
+    getTracksList();
+  })
 
   return (
     <MainLayout>

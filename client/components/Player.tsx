@@ -1,8 +1,9 @@
 import { Pause, PlayArrow, VolumeUp } from '@mui/icons-material';
 import { Grid, IconButton } from '@mui/material';
 import React, { ChangeEvent, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useActions } from '../hooks/UseAction';
-import { useTypedSelector } from '../hooks/useTypedSelector';
+import { playerSelector } from '../store/selectors';
 import styles from '../styles/Player.module.scss';
 import TrackProgress from './TrackProgress';
 
@@ -11,11 +12,9 @@ interface PlayerProps {
 }
 let audio
 const Player: React.FC<PlayerProps> = () => {
-
-  const { pause, volume, active, duration, currentTime } = useTypedSelector(state => state.player)
-
-  const { pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack } = useActions()
-
+  
+  const { pause, volume, active, duration, currentTime } = useSelector(playerSelector.getPlayerState);
+  const { pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack } = useActions();
 
   useEffect(() => {
     if (!audio) {

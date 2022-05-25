@@ -15,16 +15,4 @@ export const rootReducer = combineReducers({
   user: userReducer
 })
 
-export const reducer = (state, action: AnyAction) => {
-  switch (action.type) {
-    case HYDRATE:
-      // Attention! This will overwrite client state! Real apps should use proper reconciliation.
-      return { ...state, ...action.payload };
-    case 'TICK':
-      return { ...state, tick: action.payload };
-    default:
-      return state;
-  }
-}
-
 export type RootState = ReturnType<typeof rootReducer>

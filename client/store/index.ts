@@ -22,7 +22,7 @@ const makeStore: MakeStore<Store<RootState>>
   = () => {
     return configureStore({
       reducer: persistedReducer,
-      middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(logger),
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: true }).concat(logger),
       devTools: process.env.NODE_ENV !== 'production',
       preloadedState: {}
     })

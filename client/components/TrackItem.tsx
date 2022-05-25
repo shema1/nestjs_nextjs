@@ -5,7 +5,8 @@ import styles from '../styles/TrackItem.module.scss'
 import { Delete, Pause, PlayArrow } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { useActions } from "../hooks/UseAction";
-import { useTypedSelector } from "../hooks/useTypedSelector";
+import { useSelector } from "react-redux";
+import { playerSelector } from "../store/selectors";
 
 interface TrackItemProps {
   track: ITrack
@@ -16,7 +17,7 @@ const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
   const router = useRouter();
 
   const { playTrack, pauseTrack, setActiveTrack, removeTrack } = useActions()
-  const { pause, active } = useTypedSelector(state => state.player)
+  const { pause, volume, active, duration, currentTime } = useSelector(playerSelector.getPlayerState);
 
   const openTrackInfo = () => {
     router.push(`/tracks/${track._id}`)

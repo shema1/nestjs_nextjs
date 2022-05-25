@@ -1,12 +1,11 @@
-import { NextPage } from 'next';
 import React, { SyntheticEvent } from 'react';
-import { ICaht } from '../../types/chat';
+import { useSelector } from 'react-redux';
+import { NextPage } from 'next';
 import _ from "lodash"
 import { Avatar, Badge, Button } from '@mui/material';
-import Modal from '../Modal';
-import UsersList from '../UsersList';
+import { ICaht } from '../../types/chat';
 import CreateNewChat from './CreateNewChat';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { authSelector } from '../../store/selectors';
 interface ChatUsersListProps {
   chats: ICaht[]
   selectChat: (id: string) => void
@@ -17,8 +16,7 @@ const ChatUsersList: NextPage<ChatUsersListProps> = ({ chats, selectChat, select
 
   const [isOpenModal, setIsOpenModal] = React.useState(false);
 
-  const { currentUser } = useTypedSelector(state => state.auth);
-
+  const currentUser = useSelector(authSelector.getUser);
 
   const closeChat = () => {
     selectChat("")

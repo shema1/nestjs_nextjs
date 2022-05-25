@@ -1,28 +1,24 @@
-import { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs'
+import { NextPage } from 'next';
 import { io } from "socket.io-client";
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useSelector } from 'react-redux';
+import { authSelector, chatSelector } from '../../store/selectors';
 import ChatUsersList from '../../components/chat/ChatUsersList';
 import ChatMain from '../../components/chat/ChatMain';
 import { useActions } from '../../hooks/useAction';
 import ChatLayout from '../../layouts/ChatLayout';
-import dayjs from 'dayjs'
+
 const ENDPOINT = "http://localhost:5000/";
 
 const Chat: NextPage = () => {
   const socket = io(ENDPOINT);
 
-  const { currentUser } = useTypedSelector(state => state.auth);
-  const { chats } = useTypedSelector(state => state.chat);
-
   const { getChats, setChatsFromSocket } = useActions()
+  const currentUser = useSelector(authSelector.getUser);
+  const chats = useSelector(chatSelector.getChatsList);
 
-  const [selectedChat, setSelectedChat] = useState(null)
-
-
-  useEffect(() => {
-
-  }, [])
+  const [selectedChat, setSelectedChat] = useState(null);
 
   useEffect(() => {
     getChats()
@@ -36,10 +32,6 @@ const Chat: NextPage = () => {
       })
     }
   }, []);
-
-
-
-  const messages = []
 
   const selectChat = (id: string) => {
     setSelectedChat(id)
@@ -58,8 +50,8 @@ const Chat: NextPage = () => {
     <ChatLayout>
       <div className="main">
         <div className="container clearfix">
-          <ChatUsersList chats={chats} selectChat={selectChat} selectedChat={selectedChat}/>
-          <ChatMain onSend={onSend} messages={messages} chats={chats} selectedChat={selectedChat} />
+          <ChatUsersList chats={chats} selectChat={selectChat} selectedChat={selectedChat} />
+          <ChatMain onSend={onSend} chats={chats} selectedChat={selectedChat} />
         </div>
       </div>
     </ChatLayout>
